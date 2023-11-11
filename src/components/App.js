@@ -16,6 +16,10 @@ function App() {
     setIsPuppyInfo(true)
     setPuppyInfo(puppy)
   }
+
+  const handleUpdatedPup = (updatedPup) => {
+    setPuppyInfo(updatedPup)
+  }
   const displayDogNames = puppies.map(puppy => <PuppyListName key={puppy.id} puppy={puppy} onPuppyInfo={handlePuppyInfo} />)
   return (
     <div className="App">
@@ -26,7 +30,7 @@ function App() {
       <div id="dog-summary-container">
         <h1>DOGGO:</h1>
         <div id="dog-info">
-          {isPuppyInfo && <PuppyInfoCard puppy={puppyInfo} />}
+          {isPuppyInfo && <PuppyInfoCard puppy={puppyInfo} onUpdatedPup={handleUpdatedPup} />}
         </div>
       </div>
     </div>
