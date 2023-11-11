@@ -27,6 +27,12 @@ function App() {
     })
     setPuppies(newUpdatedPups)
   }
+  const filteredPups = puppies.filter(pup => {
+    if (isFilterOn) return pup.isGoodDog
+
+    return true
+  })
+  console.log(filteredPups)
   return (
     <div className="App">
       <div id="filter-div">
@@ -34,13 +40,13 @@ function App() {
       </div>
       <div id="dog-bar">
         <PuppiesList>
-          {puppies.map(puppy => <PuppyListName key={puppy.id} puppy={puppy} onSelectedPup={handleSelectedPup} />)}
+          {filteredPups.map(puppy => <PuppyListName key={puppy.id} puppy={puppy} onSelectedPup={handleSelectedPup} />)}
         </PuppiesList>
       </div>
       <div id="dog-summary-container">
         <h1>DOGGO:</h1>
         <div id="dog-info">
-          {puppies.map(pup => {
+          {filteredPups.map(pup => {
             if (pup.id === pupId) {
               return <PuppyInfoCard key={pupId} puppy={pup} onUpdatedPup={handleUpdatedPup} />
             }
