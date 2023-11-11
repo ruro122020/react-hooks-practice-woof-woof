@@ -1,36 +1,50 @@
 import React, { useEffect, useState } from "react";
+import PuppiesList from "./PuppiesList";
 import PuppyListName from "./PuppyListName";
 import PuppyInfoCard from "./PuppyInfoCard";
 
 function App() {
   const [puppies, setPuppies] = useState([])
-  const [isPuppyInfo, setIsPuppyInfo] = useState(false)
-  const [puppyInfo, setPuppyInfo] = useState({})
+  const [isFilterOn, setIsFilterOn] = useState(false)
+  const [pupId, setPupId] = useState(null)
+
   useEffect(() => {
     fetch(`http://localhost:3001/pups`)
       .then(res => res.json())
       .then(puppies => setPuppies(puppies))
   }, [])
 
-  const handlePuppyInfo = (puppy) => {
-    setIsPuppyInfo(true)
-    setPuppyInfo(puppy)
+  const handleSelectedPup = (pupId) => {
+    setPupId(pupId)
   }
-
   const handleUpdatedPup = (updatedPup) => {
-    setPuppyInfo(updatedPup)
+    const newUpdatedPups = puppies.map(pup => {
+      if (pup.id === updatedPup.id) {
+        return updatedPup
+      } else {
+        return pup
+      }
+    })
+    setPuppies(newUpdatedPups)
   }
-  const displayDogNames = puppies.map(puppy => <PuppyListName key={puppy.id} puppy={puppy} onPuppyInfo={handlePuppyInfo} />)
   return (
     <div className="App">
       <div id="filter-div">
-        <button id="good-dog-filter">Filter good dogs: OFF</button>
+        <button id="good-dog-filter" onClick={() => { setIsFilterOn(!isFilterOn) }}>Filter good dogs: {isFilterOn ? 'ON' : 'OFF'}</button>
       </div>
-      <div id="dog-bar">{displayDogNames}</div>
+      <div id="dog-bar">
+        <PuppiesList>
+          {puppies.map(puppy => <PuppyListName key={puppy.id} puppy={puppy} onSelectedPup={handleSelectedPup} />)}
+        </PuppiesList>
+      </div>
       <div id="dog-summary-container">
         <h1>DOGGO:</h1>
         <div id="dog-info">
-          {isPuppyInfo && <PuppyInfoCard puppy={puppyInfo} onUpdatedPup={handleUpdatedPup} />}
+          {puppies.map(pup => {
+            if (pup.id === pupId) {
+              return <PuppyInfoCard key={pupId} puppy={pup} onUpdatedPup={handleUpdatedPup} />
+            }
+          })}
         </div>
       </div>
     </div>
