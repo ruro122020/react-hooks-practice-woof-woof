@@ -1,9 +1,9 @@
 import React from 'react'
 
-const PuppyListName = ({ puppy }) => {
+const PuppyListName = ({ puppy, onPuppyInfo }) => {
 
     return (
-        <span>{puppy.name}</span>
+        <span onClick={() => onPuppyInfo(puppy)}>{puppy.name}</span>
     )
 }
 
